@@ -1,0 +1,11 @@
+{
+  "name": "VidStream",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/reisman/VidStream.git",
+  "author": "reisman <30975669+reisman@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
