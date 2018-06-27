@@ -1,12 +1,23 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpack from 'webpack';
+import webpackConfig from './webpack.config.js';
 
 const app = express();
-app.use(express.static(path.resolve()));
+app.use(express.static(path.resolve() + '/client'));
+app.use(webpackMiddleware(webpack(webpackConfig)));
+
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(500);
+    res.send("Internal server error");
+});
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(path.resolve() + '/index.html'));
+    console.log(req);
+    res.sendFile(path.join(path.resolve() + '/client/client.html'));
 });
 
 app.get('/video', (req, res) => {
