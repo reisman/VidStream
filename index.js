@@ -10,34 +10,32 @@ app.use(express.static(path.resolve() + '/client'));
 app.use(webpackMiddleware(webpack(webpackConfig)));
 
 app.use((err, req, res, next) => {
-    console.log(err);
     res.status(500);
-    res.send("Internal server error");
+    res.send('Internal server error');
 });
 
 app.get('/', (req, res) => {
-    console.log(req);
     res.sendFile(path.join(path.resolve() + '/client/client.html'));
 });
 
 app.get('/video', (req, res) => {
-    const path = 'Tmp/20180607_221031.mp4';
-    const stat = fs.statSync(path);
+    const videoPath = 'Tmp/20180607_221031.mp4';
+    const stat = fs.statSync(videoPath);
     const fileSize = stat.size;
     const range = req.headers.range;
 
     if (range) {
-        const parts = range.replace(/bytes=/, "").split("-");
+        const parts = range.replace(/bytes=/, '').split('-');
         const start = parseInt(parts[0], 10);
         const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
         const chunkSize = end - start + 1;
-        const file = fs.createReadStream(path, {start: start, end: end});
+        const file = fs.createReadStream(videoPath, { start, end });
         const head = {
             'Content-Range': `bytes ${start}-${end}/${fileSize}`,
             'Accept-Ranges': 'bytes',
             'Content-Length': chunkSize,
             'Content-Type': 'video/mp4',
-        }
+        };
 
         res.writeHead(206, head);
         file.pipe(res);
@@ -45,10 +43,10 @@ app.get('/video', (req, res) => {
         const head = {
             'Content-Length': fileSize,
             'Content-Type': 'video/mp4',
-        }
+        };
 
         res.writeHead(200, head);
-        fs.createReadStream(path).pipe(res);
+        fs.createReadStream(videoPath).pipe(res);
     }
 });
 

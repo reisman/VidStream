@@ -1,0 +1,22 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": { 
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        }
+    },
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y"
+
+    ],
+    "rules":{
+        "linebreak-style": ["error", "windows"],
+        "indent": ["error", 4],
+        "react/jsx-indent": ["error", 4]
+    }
+}
