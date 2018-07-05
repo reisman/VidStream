@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import VideoStateReducer from './videoreducer';
+import VideoListState from '../video_overview/VideoListState';
 
 export default combineReducers({
-    VideoStateReducer,
+    VideoListState,
 });

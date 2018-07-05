@@ -1,6 +1,6 @@
 import React from 'react';
 
-const VideoPlayer = (props, context) => {
+const VideoPlayer = (props) => {
     return (
         <div>
             <video id="videoPlayer" controls>

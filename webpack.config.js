@@ -45,6 +45,7 @@ export default {
     resolve: {
         extensions: ['.js', '.jsx'],
     },
+    devtool: 'inline-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: 'client/client.html',

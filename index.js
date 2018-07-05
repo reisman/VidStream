@@ -3,10 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
-import webpackConfig from './webpack.config.js';
+import webpackConfig from './webpack.config';
 
 const app = express();
-app.use(express.static(path.resolve() + '/client'));
+app.use(express.static(`${path.resolve()}/client`));
 app.use(webpackMiddleware(webpack(webpackConfig)));
 
 app.use((err, req, res, next) => {
@@ -15,14 +15,14 @@ app.use((err, req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(path.resolve() + '/client/client.html'));
+    res.sendFile(path.join(`${path.resolve()}/client/client.html`));
 });
 
 app.get('/video', (req, res) => {
     const videoPath = 'Tmp/20180607_221031.mp4';
     const stat = fs.statSync(videoPath);
     const fileSize = stat.size;
-    const range = req.headers.range;
+    const { range } = req.headers;
 
     if (range) {
         const parts = range.replace(/bytes=/, '').split('-');
@@ -48,6 +48,12 @@ app.get('/video', (req, res) => {
         res.writeHead(200, head);
         fs.createReadStream(videoPath).pipe(res);
     }
+});
+
+app.get('/videos', (req, res) => {
+    const videos = ['Tmp/20180607_221031.mp4'];
+    res.json(videos);
+    res.status(200);
 });
 
 app.listen(3000, () => console.log('Listing on port 3000'));
