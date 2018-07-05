@@ -7,7 +7,7 @@ export const VIDEO_LOADED = 'VIDEO_LOADED';
 export const openVideo = id => (dispatch) => {
     dispatch({ type: VIDEO_LOADING, videoid: id });
 
-    return axios.get('http://localhost:3000/video')
+    return axios.get(`http://localhost:3000/video/${id}`)
         .then((resp) => {
             dispatch({ type: VIDEO_LOADED, videoid: id, data: resp });
             dispatch(push('video'));

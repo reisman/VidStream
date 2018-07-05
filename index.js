@@ -4,10 +4,12 @@ import path from 'path';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
 import webpackConfig from './webpack.config';
+import bodyParser from 'body-parser';
 
 const app = express();
 app.use(express.static(`${path.resolve()}/client`));
 app.use(webpackMiddleware(webpack(webpackConfig)));
+app.use(bodyParser.json());
 
 app.use((err, req, res, next) => {
     res.status(500);
@@ -18,12 +20,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(`${path.resolve()}/client/client.html`));
 });
 
-app.get('/video', (req, res) => {
-    const videoPath = 'Tmp/20180607_221031.mp4';
+const streamVideo = (videoPath, range, response) => {
     const stat = fs.statSync(videoPath);
     const fileSize = stat.size;
-    const { range } = req.headers;
-
     if (range) {
         const parts = range.replace(/bytes=/, '').split('-');
         const start = parseInt(parts[0], 10);
@@ -37,17 +36,39 @@ app.get('/video', (req, res) => {
             'Content-Type': 'video/mp4',
         };
 
-        res.writeHead(206, head);
-        file.pipe(res);
+        response.writeHead(206, head);
+        file.pipe(response);
     } else {
         const head = {
             'Content-Length': fileSize,
             'Content-Type': 'video/mp4',
         };
 
-        res.writeHead(200, head);
-        fs.createReadStream(videoPath).pipe(res);
+        response.writeHead(200, head);
+        fs.createReadStream(videoPath).pipe(response);
     }
+};
+
+const mapVideoIdToPath = (id) => {
+    if (id === '12345') return 'Tmp/Vid1.mp4';
+    return 'Tmp/Vid2.mp4';
+};
+
+app.get('/testvideo', (req, res) => {
+    const videoPath = 'Tmp/20180607_221031.mp4';
+    streamVideo(videoPath, req.headers.range, res);
+});
+
+app.post('/video', (req, res) => {
+    const { videoid } = req.body.data;
+    const videoPath = mapVideoIdToPath(videoid);
+    streamVideo(videoPath, req.headers.range, res);
+});
+
+app.get('/video/:id', (req, res) => {
+    const videoid = req.params.id;
+    const videoPath = mapVideoIdToPath(videoid);
+    streamVideo(videoPath, req.headers.range, res);
 });
 
 app.get('/videos', (req, res) => {

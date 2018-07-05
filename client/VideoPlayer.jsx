@@ -1,27 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const VideoPlayer = (props) => {
+const VideoPlayer = ({ videoid }) => {
+    const url = `http://localhost:3000/video/${videoid}`;
     return (
         <div>
             <video id="videoPlayer" controls>
-                <track kind="captions" {...props} />
-                <source src="http://localhost:3000/video" type="video/mp4" />
+                <track kind="captions" />
+                <source src={url} type="video/mp4" />
             </video>
         </div>
     );
 };
 
-/*
-class VideoPlayer extends React.Component {
-    render() {
-        return (
-            <div>
-                <video id="videoPlayer" controls>
-                    <source src="http://localhost:3000/video" type="video/mp4" />
-                </video>
-            </div>
-        );
-    }
-}
-*/
-export default VideoPlayer;
+const mapStateToProps = state => ({
+    videoid: state.VideoListState.loadingId,
+});
+
+export default connect(mapStateToProps)(VideoPlayer);
