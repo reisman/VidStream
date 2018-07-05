@@ -3,8 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
-import webpackConfig from './webpack.config';
 import bodyParser from 'body-parser';
+import webpackConfig from './webpack.config';
 
 const app = express();
 app.use(express.static(`${path.resolve()}/client`));
@@ -55,7 +55,7 @@ const mapVideoIdToPath = (id) => {
 };
 
 app.get('/testvideo', (req, res) => {
-    const videoPath = 'Tmp/20180607_221031.mp4';
+    const videoPath = 'Tmp/Vid1.mp4';
     streamVideo(videoPath, req.headers.range, res);
 });
 
@@ -72,7 +72,10 @@ app.get('/video/:id', (req, res) => {
 });
 
 app.get('/videos', (req, res) => {
-    const videos = ['Tmp/20180607_221031.mp4'];
+    const videos = [
+        { name: 'Video1_ABC', id: '12345' },
+        { name: 'Video2_XYZ', id: '67890' },
+    ];
     res.json(videos);
     res.status(200);
 });

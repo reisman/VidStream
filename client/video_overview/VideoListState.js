@@ -1,16 +1,25 @@
-import { VIDEO_LOADING, VIDEO_LOADED } from './VideoListActions';
+import { VIDEO_LOADING, VIDEO_LOADED, VIDEOLIST_LOADING, VIDEOLIST_LOADED } from './VideoListActions';
 
 const initialState = {
-    videos: [{
-        id: 12345,
-        name: 'Tmp/20180607_221031.mp4',
-    }],
+    videos: [],
     isLoading: false,
     loadingId: null,
 };
 
 const VideoListState = (state = initialState, action) => {
     switch (action.type) {
+        case VIDEOLIST_LOADING:
+            return {
+                isLoading: true,
+                loadingId: null,
+                videos: [],
+            };
+        case VIDEOLIST_LOADED:
+            return {
+                isLoading: false,
+                loadingId: null,
+                videos: action.data,
+            };
         case VIDEO_LOADING:
             return {
                 isLoading: true,
