@@ -13,7 +13,7 @@ class VideoList extends Component {
         const { videos, openVideoAction } = this.props;
 
         const createVideo = video => (
-            <Video key={video.id} name={video.name} onClicked={() => openVideoAction(video.id)} />
+            <Video key={video.id} name={video.name} length={video.length} onClicked={() => openVideoAction(video.id)} />
         );
    
         return (
