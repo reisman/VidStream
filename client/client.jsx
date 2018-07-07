@@ -9,12 +9,15 @@ import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-reac
 import rootReducer from './reducers';
 import VideoList from './video_overview/VideoList';
 import VideoPlayer from './VideoPlayer';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const history = createBrowserHistory();
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStore(
     connectRouter(history)(rootReducer),
-    compose(
+    composeEnhancers(
         applyMiddleware(
             routerMiddleware(history),
             thunk,
