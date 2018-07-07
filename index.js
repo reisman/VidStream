@@ -3,6 +3,7 @@ import path from 'path';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import webpackConfig from './webpack.config';
 import { getVideoInfos, getVideoPath } from './server/DataAccess';
 import streamFile from './server/FileStreaming';
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.static(`${path.resolve()}/client`));
 app.use(webpackMiddleware(webpack(webpackConfig)));
 app.use(bodyParser.json());
+app.use(morgan('short'));
 
 app.use((err, req, res, next) => {
     res.status(500);
@@ -37,10 +39,15 @@ app.get('/video/:id', (req, res) => {
     streamToReponse(req.headers.range, req.params.id, res);
 });
 
-app.get('/videos', (req, res) => {
+app.get('/videos', (_, res) => {
     const videos = getVideoInfos();
     res.json(videos);
     res.status(200);
+});
+
+app.use((_, res) => {
+    res.statusCode = 404;
+    res.end('404!');
 });
 
 app.listen(3000, () => console.log('Listing on port 3000'));
