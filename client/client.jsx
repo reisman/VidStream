@@ -9,7 +9,9 @@ import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-reac
 import rootReducer from './reducers';
 import VideoList from './video_overview/VideoList';
 import VideoPlayer from './VideoPlayer';
+import Login from './authentication/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { userIsAuthenticatedRedir, userIsNotAuthenticatedRedir } from './authentication/auth';
 
 const history = createBrowserHistory();
 
@@ -31,6 +33,7 @@ render(
             <div>
                 <Switch>
                     <Route path="/video" component={VideoPlayer} />
+                    <Route path="/login" component={Login} />
                     <Route component={VideoList} />
                 </Switch>
             </div>
